@@ -28,28 +28,42 @@ while(menu){
       |Please select an option from the menu
       |1. Enter Property
       |2. View Properties
-      |3. Log out
-      |4. Enter Owner
-      |5. Enter Tenant
+      |3. Enter Owner
+      |4. Enter Tenant
+      |5. Log out
       |""".stripMargin)
   var menuSelect = readInt()
   //Put menu options into methods
   menuSelect match {
     case 1 =>
       try{
-        writeToDB(statement, userID)
+        writeToDB1(statement, propertyID)
       }
       catch{
         case _: Throwable => println("Exception in write method")
       }
     case 2 =>
       try{
-        readFromDB(statement, userID)
+        readFromDB1(statement, propertyID)
       }
       catch{
         case _: Throwable => println("Exception in read method")
       }
-    case 3 =>
+      case 3 =>
+      try{
+        writeToDB1(statement, ownerID)
+      }
+      catch{
+        case _: Throwable => println("Exception in write method")
+      }
+      case 4 =>
+      try{
+        writeToDB(statement, tenantID)
+      }
+      catch{
+        case _: Throwable => println("Exception in write method")
+      }
+    case 5 =>
       println("Logging out")
       menu = false
     case _ =>
@@ -106,7 +120,7 @@ def readFromDB(statement: Statement, userID: String): Unit={
         s"FROM content c INNER JOIN contIndex i " +
         s"ON c.entryID = i.entryID WHERE i.userID = ${userID} AND i.entryDate = CAST( CURDATE() AS Date );")
       printResults(readSet, 2)
-    case 3 =>
+    case 6 =>
       println("Exiting read menu.")
     case _ =>
       println("Invalid entry")
